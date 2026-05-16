@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.MukundaKatta/emoji",
+  "description": "MCP server: convert between emoji characters and shortcodes, with metadata.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/MukundaKatta/emoji-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/MukundaKatta/emoji-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@mukundakatta/emoji-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
