@@ -40,3 +40,17 @@ test('round trip through unemojify and emojify', () => {
   const back = toShortcode(e);
   assert.equal(back, orig);
 });
+
+test('empty input is handled gracefully', () => {
+  assert.equal(fromShortcode(''), '');
+  assert.equal(toShortcode(''), '');
+  const r = info('');
+  assert.equal(r.input, '');
+  assert.equal(r.shortcode, null);
+  assert.deepEqual(r.codepoints, []);
+});
+
+test('info reports a code point per character for multi-char input', () => {
+  const r = info('AB');
+  assert.deepEqual(r.codepoints, ['U+41', 'U+42']);
+});

@@ -81,20 +81,31 @@ const TOOLS = [
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
 
+/**
+ * Read a required string field from untrusted tool arguments.
+ * Throws a clear error if the field is missing or not a string, so a
+ * malformed request surfaces a helpful message instead of leaking an
+ * opaque internal assertion from a dependency.
+ */
+function requireString(args: unknown, field: string): string {
+  const value = (args as Record<string, unknown> | null | undefined)?.[field];
+  if (typeof value !== 'string') {
+    throw new Error(`missing or invalid string argument: "${field}"`);
+  }
+  return value;
+}
+
 server.setRequestHandler(CallToolRequestSchema, async (req) => {
   const { name, arguments: args } = req.params;
   try {
     if (name === 'from_shortcode') {
-      const a = args as unknown as { text: string };
-      return textResult(fromShortcode(a.text));
+      return textResult(fromShortcode(requireString(args, 'text')));
     }
     if (name === 'to_shortcode') {
-      const a = args as unknown as { text: string };
-      return textResult(toShortcode(a.text));
+      return textResult(toShortcode(requireString(args, 'text')));
     }
     if (name === 'info') {
-      const a = args as unknown as { input: string };
-      return jsonResult(info(a.input));
+      return jsonResult(info(requireString(args, 'input')));
     }
     return errorResult('unknown tool: ' + name);
   } catch (err) {
